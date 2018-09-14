@@ -6,7 +6,6 @@ package kotlinx.coroutines.experimental.guava
 
 import com.google.common.util.concurrent.*
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.CancellationException
 import org.hamcrest.core.*
 import org.junit.*
 import org.junit.Assert.*
@@ -129,7 +128,7 @@ class ListenableFutureTest : TestBase() {
     @Test
     fun testCompletedDeferredAsListenableFuture() = runBlocking {
         expect(1)
-        val deferred = async(coroutineContext, CoroutineStart.UNDISPATCHED) {
+        val deferred = async(start = CoroutineStart.UNDISPATCHED) {
             expect(2) // completed right away
             "OK"
         }
@@ -142,7 +141,7 @@ class ListenableFutureTest : TestBase() {
     @Test
     fun testWaitForDeferredAsListenableFuture() = runBlocking {
         expect(1)
-        val deferred = async(coroutineContext) {
+        val deferred = async {
             expect(3) // will complete later
             "OK"
         }
@@ -171,7 +170,7 @@ class ListenableFutureTest : TestBase() {
     fun testCancellableAwait() = runBlocking {
         expect(1)
         val toAwait = SettableFuture.create<String>()
-        val job = launch(coroutineContext, CoroutineStart.UNDISPATCHED) {
+        val job = launch(start = CoroutineStart.UNDISPATCHED) {
             expect(2)
             try {
                 toAwait.await() // suspends

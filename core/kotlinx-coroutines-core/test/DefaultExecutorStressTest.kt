@@ -6,7 +6,6 @@ package kotlinx.coroutines.experimental
 
 import org.junit.*
 import java.util.concurrent.*
-import kotlin.coroutines.experimental.*
 
 class DefaultExecutorStressTest : TestBase() {
 
@@ -14,7 +13,7 @@ class DefaultExecutorStressTest : TestBase() {
     fun testDelay() = runTest {
         val iterations = 100_000 * stressTestMultiplier
 
-        val ctx = DefaultExecutor + coroutineContext
+        val ctx = DefaultExecutor
         expect(1)
         var expected = 1
         repeat(iterations) {

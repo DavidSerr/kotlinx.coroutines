@@ -5,7 +5,6 @@
 package kotlinx.coroutines.experimental.future
 
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.CancellationException
 import org.hamcrest.core.*
 import org.junit.*
 import org.junit.Assert.*
@@ -111,7 +110,7 @@ class FutureTest : TestBase() {
     fun testWaitForFutureWithException() = runTest {
         expect(1)
         val toAwait = CompletableFuture<String>()
-        val future = future(coroutineContext, start = CoroutineStart.UNDISPATCHED) {
+        val future = future(start = CoroutineStart.UNDISPATCHED) {
             try {
                 expect(2)
                 toAwait.await() // will suspend (slow path)
@@ -164,7 +163,7 @@ class FutureTest : TestBase() {
     @Test
     fun testCompletedDeferredAsCompletableFuture() = runBlocking {
         expect(1)
-        val deferred = async(coroutineContext, CoroutineStart.UNDISPATCHED) {
+        val deferred = async(start = CoroutineStart.UNDISPATCHED) {
             expect(2) // completed right away
             "OK"
         }
@@ -177,7 +176,7 @@ class FutureTest : TestBase() {
     @Test
     fun testWaitForDeferredAsCompletableFuture() = runBlocking {
         expect(1)
-        val deferred = async(coroutineContext) {
+        val deferred = async {
             expect(3) // will complete later
             "OK"
         }
@@ -206,7 +205,7 @@ class FutureTest : TestBase() {
     fun testCancellableAwaitFuture() = runBlocking {
         expect(1)
         val toAwait = CompletableFuture<String>()
-        val job = launch(coroutineContext, CoroutineStart.UNDISPATCHED) {
+        val job = launch(start = CoroutineStart.UNDISPATCHED) {
             expect(2)
             try {
                 toAwait.await() // suspends
